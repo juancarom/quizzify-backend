@@ -1,0 +1,111 @@
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE DATABASE "backend_development" ENCODING = 'unicode'[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE DATABASE "backend_development" ENCODING = 'unicode'[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE DATABASE "backend_development" ENCODING = 'unicode'[0m
+  [1m[35m (288.7ms)[0m  [1m[35mCREATE DATABASE "backend_test" ENCODING = 'unicode'[0m
+  [1m[35m (7.8ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (2.5ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT pg_try_advisory_lock(5073945470573576205)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.7ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.7ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'development', '2025-12-01 17:22:18.669782', '2025-12-01 17:22:18.669784') RETURNING "key"[0m
+Migrating to CreateUsers (20251201000001)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (3.5ms)[0m  [1m[35mCREATE TABLE "users" ("id" bigserial primary key, "email" character varying DEFAULT '' NOT NULL, "encrypted_password" character varying DEFAULT '' NOT NULL, "reset_password_token" character varying, "reset_password_sent_at" timestamp(6), "remember_created_at" timestamp(6), "provider" character varying, "uid" character varying, "name" character varying, "avatar_url" character varying, "role" character varying DEFAULT 'user', "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (2.3ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_email" ON "users" ("email")[0m
+  [1m[35m (0.8ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_reset_password_token" ON "users" ("reset_password_token")[0m
+  [1m[35m (0.9ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_provider_and_uid" ON "users" ("provider", "uid")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20251201000001') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateJwtDenylist (20251201000002)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (2.9ms)[0m  [1m[35mCREATE TABLE "jwt_denylist" ("id" bigserial primary key, "jti" character varying NOT NULL, "exp" timestamp(6) NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (1.0ms)[0m  [1m[35mCREATE INDEX "index_jwt_denylist_on_jti" ON "jwt_denylist" ("jti")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20251201000002') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT pg_advisory_unlock(5073945470573576205)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started GET "/up" for 172.217.28.234 at 2025-12-01 18:48:12 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  
+OmniAuth::NoSessionError (You must provide a session to use OmniAuth.):
+  
+omniauth (2.1.4) lib/omniauth/strategy.rb:180:in `call!'
+omniauth (2.1.4) lib/omniauth/strategy.rb:169:in `call'
+warden-jwt_auth (0.12.0) lib/warden/jwt_auth/middleware/token_dispatcher.rb:20:in `call'
+warden-jwt_auth (0.12.0) lib/warden/jwt_auth/middleware/revocation_manager.rb:21:in `call'
+rack (3.2.4) lib/rack/builder.rb:283:in `call'
+warden-jwt_auth (0.12.0) lib/warden/jwt_auth/middleware.rb:22:in `call'
+warden (1.2.9) lib/warden/manager.rb:36:in `block in call'
+warden (1.2.9) lib/warden/manager.rb:34:in `catch'
+warden (1.2.9) lib/warden/manager.rb:34:in `call'
+rack (3.2.4) lib/rack/etag.rb:29:in `call'
+rack (3.2.4) lib/rack/conditional_get.rb:31:in `call'
+rack (3.2.4) lib/rack/head.rb:15:in `call'
+activerecord (7.1.6) lib/active_record/migration.rb:655:in `call'
+actionpack (7.1.6) lib/action_dispatch/middleware/callbacks.rb:29:in `block in call'
+activesupport (7.1.6) lib/active_support/callbacks.rb:101:in `run_callbacks'
+actionpack (7.1.6) lib/action_dispatch/middleware/callbacks.rb:28:in `call'
+actionpack (7.1.6) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (7.1.6) lib/action_dispatch/middleware/actionable_exceptions.rb:16:in `call'
+actionpack (7.1.6) lib/action_dispatch/middleware/debug_exceptions.rb:29:in `call'
+actionpack (7.1.6) lib/action_dispatch/middleware/show_exceptions.rb:31:in `call'
+railties (7.1.6) lib/rails/rack/logger.rb:37:in `call_app'
+railties (7.1.6) lib/rails/rack/logger.rb:24:in `block in call'
+activesupport (7.1.6) lib/active_support/tagged_logging.rb:139:in `block in tagged'
+activesupport (7.1.6) lib/active_support/tagged_logging.rb:39:in `tagged'
+activesupport (7.1.6) lib/active_support/tagged_logging.rb:139:in `tagged'
+activesupport (7.1.6) lib/active_support/broadcast_logger.rb:241:in `method_missing'
+railties (7.1.6) lib/rails/rack/logger.rb:24:in `call'
+actionpack (7.1.6) lib/action_dispatch/middleware/remote_ip.rb:92:in `call'
+actionpack (7.1.6) lib/action_dispatch/middleware/request_id.rb:28:in `call'
+rack (3.2.4) lib/rack/runtime.rb:24:in `call'
+activesupport (7.1.6) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (7.1.6) lib/action_dispatch/middleware/server_timing.rb:59:in `block in call'
+actionpack (7.1.6) lib/action_dispatch/middleware/server_timing.rb:24:in `collect_events'
+actionpack (7.1.6) lib/action_dispatch/middleware/server_timing.rb:58:in `call'
+actionpack (7.1.6) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (7.1.6) lib/action_dispatch/middleware/static.rb:25:in `call'
+rack (3.2.4) lib/rack/sendfile.rb:131:in `call'
+actionpack (7.1.6) lib/action_dispatch/middleware/host_authorization.rb:141:in `call'
+rack-cors (3.0.0) lib/rack/cors.rb:102:in `call'
+railties (7.1.6) lib/rails/engine.rb:536:in `call'
+puma (7.1.0) lib/puma/configuration.rb:300:in `call'
+puma (7.1.0) lib/puma/request.rb:101:in `block in handle_request'
+puma (7.1.0) lib/puma/thread_pool.rb:355:in `with_force_shutdown'
+puma (7.1.0) lib/puma/request.rb:100:in `handle_request'
+puma (7.1.0) lib/puma/server.rb:503:in `process_client'
+puma (7.1.0) lib/puma/server.rb:262:in `block in run'
+puma (7.1.0) lib/puma/thread_pool.rb:182:in `block in spawn_thread'
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE DATABASE "backend_development" ENCODING = 'unicode'[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE DATABASE "backend_test" ENCODING = 'unicode'[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT pg_try_advisory_lock(5073945470573576205)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.8ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT pg_advisory_unlock(5073945470573576205)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started GET "/up" for 172.217.28.234 at 2025-12-01 18:57:05 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Rails::HealthController#show as */*
+  Rendering html template
+  Rendered html template (Duration: 0.0ms | Allocations: 10)
+Completed 200 OK in 37ms (Views: 23.2ms | ActiveRecord: 0.0ms | Allocations: 5704)
+
+
+Started POST "/signup" for 172.217.28.234 at 2025-12-01 19:15:38 +0000
+Processing by Users::RegistrationsController#create as */*
+  Parameters: {"user"=>{"email"=>"test@example.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]", "name"=>"Test User"}, "registration"=>{"user"=>{"email"=>"test@example.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]", "name"=>"Test User"}}}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mUser Exists? (2.7ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "test@example.com"], ["LIMIT", 1]]
+  [1m[36mCACHE User Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "test@example.com"], ["LIMIT", 1]]
+  [1m[36mUser Create (0.9ms)[0m  [1m[32mINSERT INTO "users" ("email", "encrypted_password", "reset_password_token", "reset_password_sent_at", "remember_created_at", "provider", "uid", "name", "avatar_url", "role", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING "id"[0m  [["email", "test@example.com"], ["encrypted_password", "[FILTERED]"], ["reset_password_token", "[FILTERED]"], ["reset_password_sent_at", "[FILTERED]"], ["remember_created_at", nil], ["provider", nil], ["uid", nil], ["name", "Test User"], ["avatar_url", nil], ["role", "user"], ["created_at", "2025-12-01 19:15:39.376265"], ["updated_at", "2025-12-01 19:15:39.376265"]]
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[35mCOMMIT[0m
+Completed 200 OK in 370ms (Views: 0.5ms | ActiveRecord: 12.7ms | Allocations: 41469)
+
+
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE DATABASE "backend_development" ENCODING = 'unicode'[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE DATABASE "backend_test" ENCODING = 'unicode'[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT pg_try_advisory_lock(5073945470573576205)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.9ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT pg_advisory_unlock(5073945470573576205)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
